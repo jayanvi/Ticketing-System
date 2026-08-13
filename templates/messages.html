@@ -23,6 +23,29 @@
 <body>
 
     <h1>💬 Ticket Messages</h1>
+    <h2>Add a Message</h2>
+
+<form action="/tickets/{{ ticket_id }}/messages/add" method="post">
+
+    <input
+        type="text"
+        name="author"
+        placeholder="Author"
+        required
+    >
+
+    <input
+        type="text"
+        name="message_text"
+        placeholder="Message"
+        required
+    >
+
+    <button type="submit">
+        Add Message
+    </button>
+
+</form>
 
     {% for message in messages %}
 

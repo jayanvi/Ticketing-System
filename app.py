@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, redirect
 import lakebase
 
 app = Flask(__name__)
@@ -87,7 +87,62 @@ def get_messages(ticket_id):
         "messages.html",
         messages=rows
     )
+@app.route("/tickets/create", methods=["POST"])
+def create_ticket_form():
 
+    title = request.form["title"]
+    created_by = request.form["created_by"]
+
+    lakebase.run_write(
+        """
+        INSERT INTO tickets
+        (title, status, created_by, created_at)
+        VALUES (%s, 'open', %s, NOW())
+        """,
+        (title, created_by),
+    )
+
+    return redirect("/tickets")
+
+@app.route("/tickets/<int:ticket_id>/messages/add", methods=["POST"])
+def add_message_form(ticket_id):
+
+    message_text = request.form["message_text"]
+    author = request.form["author"]
+
+    lakebase.run_write(
+        """
+        INSERT INTO ticket_messages
+        (ticket_id, message_text, author, created_at)
+        VALUES (%s, %s, %s, NOW())
+        """,
+        (
+            ticket_id,
+            message_text,
+            author,
+        ),
+    )
+
+    return redirect(f"/tickets/{ticket_id}/messages")
+
+@app.route("/tickets/<int:ticket_id>/status/update", methods=["POST"])
+def update_status_form(ticket_id):
+
+    status = request.form["status"]
+
+    lakebase.run_write(
+        """
+        UPDATE tickets
+        SET status = %s
+        WHERE ticket_id = %s
+        """,
+        (
+            status,
+            ticket_id,
+        ),
+    )
+
+    return redirect("/tickets")
 
 @app.route("/tickets", methods=["POST"])
 def create_ticket():

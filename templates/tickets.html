@@ -40,6 +40,52 @@
 <body>
 
     <h1>🎫 Support Tickets</h1>
+    <h2>Create a New Ticket</h2>
+
+    <form action="/tickets/create" method="post">
+
+    <input
+        type="text"
+        name="title"
+        placeholder="Ticket title"
+        required
+    >
+
+    <input
+        type="text"
+        name="created_by"
+        placeholder="Created by"
+        required
+    >
+
+    <button type="submit">
+        Create Ticket
+    </button>
+
+    </form>
+<h2>Add a Message</h2>
+
+<form action="/tickets/{{ ticket_id }}/messages/add" method="post">
+
+    <input
+        type="text"
+        name="author"
+        placeholder="Author"
+        required
+    >
+
+    <input
+        type="text"
+        name="message_text"
+        placeholder="Message"
+        required
+    >
+
+    <button type="submit">
+        Add Message
+    </button>
+
+</form>
     <h3>Filter by Status</h3>
 
     <a href="/tickets">All</a> |
