@@ -3,10 +3,7 @@ import lakebase
 
 app = Flask(__name__)
 
-
 @app.route("/")
-def home():
-    @app.route("/")
 def home():
 
     stats = lakebase.run_query(
@@ -23,7 +20,6 @@ def home():
         "index.html",
         stats=stats
     )
-    
 
 
 @app.route("/tickets")
