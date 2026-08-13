@@ -15,8 +15,7 @@ def home():
         from tickets
         """
         )[0]
-    return 
-        render_template("index.html",stats = stats,)
+    return render_template("index.html",stats = stats)
     
 
 
