@@ -107,6 +107,23 @@
 
         {% for ticket in tickets %}
 
+        <td>
+        <form action="/tickets/{{ ticket.ticket_id }}/status/update"
+          method="post">
+
+        <select name="status">
+            <option value="open">Open</option>
+            <option value="in_progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+        </select>
+
+        <button type="submit">
+            Update
+        </button>
+
+        </form>
+    </td>
+
         <tr>
             <td>{{ ticket.ticket_id }}</td>
 
