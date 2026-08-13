@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, render_template
-
 import lakebase
+
 app = Flask(__name__)
 
 
@@ -26,25 +26,28 @@ def get_tickets():
 
     return jsonify(rows)
 
+
 @app.route("/tickets/<int:ticket_id>/messages")
 def get_messages(ticket_id):
 
     rows = lakebase.run_query(
         """
-        SELECT message_id,
-               message_text,
-               author,
-               created_at
+        SELECT
+            message_id,
+            message_text,
+            author,
+            created_at
         FROM ticket_messages
         WHERE ticket_id = %s
         ORDER BY created_at
         """,
-        (ticket_id,)
+        (ticket_id,),
     )
 
     return jsonify(rows)
 
-    @app.route("/tickets", methods=["POST"])
+
+@app.route("/tickets", methods=["POST"])
 def create_ticket():
 
     data = request.get_json()
@@ -58,13 +61,14 @@ def create_ticket():
         (
             data["title"],
             "open",
-            data["created_by"]
-        )
+            data["created_by"],
+        ),
     )
 
     return jsonify({"message": "Ticket created"})
 
-    @app.route("/tickets/<int:ticket_id>/messages", methods=["POST"])
+
+@app.route("/tickets/<int:ticket_id>/messages", methods=["POST"])
 def add_message(ticket_id):
 
     data = request.get_json()
@@ -78,13 +82,14 @@ def add_message(ticket_id):
         (
             ticket_id,
             data["message_text"],
-            data["author"]
-        )
+            data["author"],
+        ),
     )
 
     return jsonify({"message": "Message added"})
 
-    @app.route("/tickets/<int:ticket_id>/status", methods=["PATCH"])
+
+@app.route("/tickets/<int:ticket_id>/status", methods=["PATCH"])
 def update_status(ticket_id):
 
     data = request.get_json()
@@ -97,10 +102,8 @@ def update_status(ticket_id):
         """,
         (
             data["status"],
-            ticket_id
-        )
+            ticket_id,
+        ),
     )
 
     return jsonify({"message": "Status updated"})
-
-    
