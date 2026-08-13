@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 
+import lakebase
 app = Flask(__name__)
 
 
@@ -10,4 +11,17 @@ def home():
 
 @app.route("/tickets")
 def get_tickets():
-    return jsonify({"status": "endpoint works"})
+    rows = lakebase.run_query(
+        """
+        SELECT
+            ticket_id,
+            title,
+            status,
+            created_by,
+            created_at
+        FROM tickets
+        ORDER BY created_at DESC
+        """
+    )
+
+    return jsonify(rows)
