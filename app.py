@@ -6,29 +6,63 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    stats = lakebase.run_query(
+        """
+        SELECT 
+          COUNT(*) as total_tickets,
+          COUNT(case when status = 'open' then 1 END ) AS open_tickets
+          COUNT(case when status = 'resolved' then 1 END) AS resolved_tickets
+        from tickets
+        """
+        )[0]
+    return 
+        render_template("index.html",stats = stats,)
+    
 
 
 @app.route("/tickets")
 def get_tickets():
-    rows = lakebase.run_query(
-        """
-        SELECT
-            ticket_id,
-            title,
-            status,
-            created_by,
-            created_at
-        FROM tickets
-        ORDER BY created_at DESC
-        """
-    )
+
+    status = request.args.get("status")
+
+    if status:
+
+        rows = lakebase.run_query(
+            """
+            SELECT
+                ticket_id,
+                title,
+               	status,
+                priority,
+                created_by,
+                created_at
+            FROM tickets
+            WHERE status = %s
+            ORDER BY created_at DESC
+            """,
+            (status,),
+        )
+
+    else:
+
+        rows = lakebase.run_query(
+            """
+            SELECT
+                ticket_id,
+                title,
+                status,
+                priority,
+                created_by,
+                created_at
+            FROM tickets
+            ORDER BY created_at DESC
+            """
+        )
 
     return render_template(
-    "tickets.html",
-    tickets=rows
-)
-
+        "tickets.html",
+        tickets=rows,
+    )
 
 @app.route("/tickets/<int:ticket_id>/messages")
 def get_messages(ticket_id):

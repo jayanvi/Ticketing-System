@@ -40,13 +40,21 @@
 <body>
 
     <h1>🎫 Support Tickets</h1>
+    <h3>Filter by Status</h3>
 
+    <a href="/tickets">All</a> |
+    <a href="/tickets?status=open">Open</a> |
+    <a href="/tickets?status=in_progress">In Progress</a> |
+    <a href="/tickets?status=resolved">Resolved</a>
+
+<br><br>
     <table>
 
         <tr>
             <th>ID</th>
             <th>Title</th>
             <th>Status</th>
+            <th>Priority</th>
             <th>Created By</th>
             <th>Created At</th>
         </tr>
@@ -63,6 +71,8 @@
             </td>
 
             <td>{{ ticket.status }}</td>
+
+            <td>{{ ticket.priority }}</td>
 
             <td>{{ ticket.created_by }}</td>
 
