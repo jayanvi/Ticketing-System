@@ -6,16 +6,23 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
+    @app.route("/")
+def home():
+
     stats = lakebase.run_query(
         """
-        SELECT 
-          COUNT(*) as total_tickets,
-          COUNT(case when status = 'open' then 1 END ) AS open_tickets
-          COUNT(case when status = 'resolved' then 1 END) AS resolved_tickets
-        from tickets
+        SELECT
+            COUNT(*) AS total_tickets,
+            SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) AS open_tickets,
+            SUM(CASE WHEN status = 'resolved' THEN 1 ELSE 0 END) AS resolved_tickets
+        FROM tickets
         """
-        )[0]
-    return render_template("index.html",stats = stats)
+    )[0]
+
+    return render_template(
+        "index.html",
+        stats=stats
+    )
     
 
 
