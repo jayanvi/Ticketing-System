@@ -24,7 +24,10 @@ def get_tickets():
         """
     )
 
-    return jsonify(rows)
+    return render_template(
+    "tickets.html",
+    tickets=rows
+)
 
 
 @app.route("/tickets/<int:ticket_id>/messages")
@@ -44,7 +47,10 @@ def get_messages(ticket_id):
         (ticket_id,),
     )
 
-    return jsonify(rows)
+    return render_template(
+        "messages.html",
+        messages=rows
+    )
 
 
 @app.route("/tickets", methods=["POST"])
