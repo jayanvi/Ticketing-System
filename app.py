@@ -85,7 +85,8 @@ def get_messages(ticket_id):
 
     return render_template(
         "messages.html",
-        messages=rows
+        messages=rows,
+        ticket_id = ticket_id
     )
 @app.route("/tickets/create", methods=["POST"])
 def create_ticket_form():
